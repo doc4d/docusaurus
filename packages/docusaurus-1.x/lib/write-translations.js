@@ -77,7 +77,7 @@ function execute() {
   const docsDir = nodePath.join(CWD, '../', readMetadata.getDocsPath());
   const versionedDocsDir = nodePath.join(CWD, 'versioned_docs');
 
-  const translateDoc = (file, refDir) => {
+  const translateDoc = (file, refDir, versionPrefix) => {
     const extension = nodePath.extname(file);
     if (extension === '.md' || extension === '.markdown') {
       let res;
@@ -91,7 +91,11 @@ function execute() {
         return;
       }
       const metadata = res.metadata;
-      const id = metadata.localized_id;
+      var id = metadata.localized_id;
+
+      if (versionPrefix) {
+        id = versionPrefix+id.replace(versionPrefix,"");
+      }
 
       translations['localized-strings'].docs[id] = {};
       translations['localized-strings'].docs[id].title = metadata.title;
@@ -103,9 +107,10 @@ function execute() {
     }
   };
   glob.sync(`${docsDir}/**`).forEach(file => translateDoc(file, docsDir));
-  glob
-    .sync(`${versionedDocsDir}/**`)
-    .forEach(file => translateDoc(file, versionedDocsDir));
+  glob.sync(`${versionedDocsDir}/*`).forEach(oneVersionDocsDir => {
+    var versionPrefix = oneVersionDocsDir.split('/').reverse()[0]+"-";
+    glob.sync(`${oneVersionDocsDir}/**`).forEach(file => translateDoc(file, oneVersionDocsDir, versionPrefix));
+  });
 
   // look through header links for text to translate
   siteConfig.headerLinks.forEach(link => {
