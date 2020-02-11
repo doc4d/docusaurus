@@ -130,7 +130,7 @@ function getRedirectMarkup(metadata, siteConfig) {
   const docsPart = `${siteConfig.docsUrl ? `${siteConfig.docsUrl}/` : ''}`;
   if (
     !env.translation.enabled ||
-    !metadata.permalink.includes(`${docsPart}en`)
+    !metadata.permalink.includes(`${docsPart}en/`)
   ) {
     return null;
   }
