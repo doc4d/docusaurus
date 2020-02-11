@@ -90,7 +90,7 @@ if (fs.existsSync(`${CWD}/versioned_docs/version-${currentVersion}`)) {
     `${CWD}/versioned_docs/version-${newVersion}`,
   );
 
-  const files = glob.sync(`${CWD}/versioned_docs/version-${newVersion}/*`);
+  const files = glob.sync(`${CWD}/versioned_docs/version-${newVersion}/**`);
   files.forEach(file => {
     const extension = path.extname(file);
     if (extension !== '.md' && extension !== '.markdown') {
