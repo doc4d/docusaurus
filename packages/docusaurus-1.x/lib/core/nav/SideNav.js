@@ -30,15 +30,19 @@ class SideNav extends React.Component {
     let localizedString;
     const i18n = translation[this.props.language];
     const id = metadata.localized_id;
+    const original_id = metadata.original_id || id;
     const sbTitle = metadata.sidebar_label;
 
     if (sbTitle) {
       localizedString =
         idx(i18n, ['localized-strings', 'docs', id, 'sidebar_label']) ||
+        idx(i18n, ['localized-strings', 'docs', original_id, 'sidebar_label']) ||
         sbTitle;
     } else {
       localizedString =
-        idx(i18n, ['localized-strings', 'docs', id, 'title']) || metadata.title;
+        idx(i18n, ['localized-strings', 'docs', id, 'title']) ||
+        idx(i18n, ['localized-strings', 'docs', original_id, 'title']) ||
+        metadata.title;
     }
     return localizedString;
   }
